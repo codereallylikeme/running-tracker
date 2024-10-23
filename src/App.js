@@ -48,10 +48,10 @@ const formatDuration = (milliseconds) => {
 function App() {
   const [weeklyGoal, setWeeklyGoal] = useState(() => {
     // Load from localStorage, fallback to default value if null
-    return parseFloat(localStorage.getItem("weeklyGoal")) || 5;
+    return parseFloat(localStorage.getItem("weeklyGoal")) || 1;
   });
   const [dailyGoal, setDailyGoal] = useState(() => {
-    return parseFloat(localStorage.getItem("dailyGoal")) || 5;
+    return parseFloat(localStorage.getItem("dailyGoal")) || 1;
   });
   const [distanceCovered, setDistanceCovered] = useState(0); // Distance covered in kilometers
   const [route, setRoute] = useState([]); // Store the running route
