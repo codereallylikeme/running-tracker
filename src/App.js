@@ -48,10 +48,10 @@ const formatDuration = (milliseconds) => {
 function App() {
   const [weeklyGoal, setWeeklyGoal] = useState(() => {
     // Load from localStorage, fallback to default value if null
-    return parseFloat(localStorage.getItem("weeklyGoal")) || 1;
+    return parseFloat(localStorage.getItem("weeklyGoal")) || 40;
   });
   const [dailyGoal, setDailyGoal] = useState(() => {
-    return parseFloat(localStorage.getItem("dailyGoal")) || 1;
+    return parseFloat(localStorage.getItem("dailyGoal")) || 5;
   });
   const [distanceCovered, setDistanceCovered] = useState(0); // Distance covered in kilometers
   const [route, setRoute] = useState([]); // Store the running route
@@ -202,6 +202,8 @@ function App() {
               <Col sm="6">
                 <Form.Control
                   type="number"
+                  step="0.1" // Allow decimal input
+                  inputMode="decimal" // Mobile optimization to bring numeric keyboard
                   value={weeklyGoal}
                   onChange={handleWeeklyGoalChange}
                   min="1"
@@ -219,6 +221,8 @@ function App() {
               <Col sm="6">
                 <Form.Control
                   type="number"
+                  step="0.1" // Allow decimal input
+                  inputMode="decimal" // Mobile optimization to bring numeric keyboard
                   value={dailyGoal}
                   onChange={handleDailyGoalChange}
                   min="1"
