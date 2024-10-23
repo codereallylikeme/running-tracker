@@ -1,0 +1,144 @@
+/* General styles */
+body {
+  background-color: #f4f6f9;
+  font-family: 'Roboto', sans-serif;
+}
+
+h1, h2, h3, h4, h5 {
+  font-weight: 600;
+}
+
+h1 {
+  font-size: 2.5rem;
+  color: #007bff;
+}
+
+h2 {
+  font-size: 1.8rem;
+  color: #333;
+}
+
+/* Card styling */
+.card {
+  border-radius: 10px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Input fields */
+input[type="number"] {
+  border-radius: 8px;
+  border: 2px solid #ced4da;
+  padding: 10px;
+  font-size: 1.1rem;
+}
+
+input[type="number"]:focus {
+  border-color: #007bff;
+  box-shadow: 0px 0px 5px rgba(0, 123, 255, 0.25);
+}
+
+/* Buttons */
+.btn {
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 8px;
+}
+
+.btn-lg {
+  padding: 12px 28px;
+}
+
+.btn-success {
+  background-color: #28a745;
+  border: none;
+}
+
+.btn-success:hover {
+  background-color: #218838;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border: none;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  border: none;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+}
+
+.btn-dark {
+  background-color: #343a40;
+  border: none;
+}
+
+.btn-dark:hover {
+  background-color: #23272b;
+}
+
+/* Progress circle styling */
+.CircularProgressbar {
+  width: 150px;
+  height: 150px;
+}
+
+.CircularProgressbar-text {
+  font-size: 24px;
+  font-weight: bold;
+  fill: #007bff;
+}
+
+/* Map styling */
+.leaflet-container {
+  height: 300px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}
+
+/* Form validation error */
+.is-invalid {
+  border-color: #dc3545;
+}
+
+.is-invalid:focus {
+  box-shadow: 0px 0px 5px rgba(220, 53, 69, 0.25);
+}
+
+.invalid-feedback {
+  font-size: 0.9rem;
+  color: #dc3545;
+}
+
+/* Utility classes */
+.text-primary {
+  color: #007bff !important;
+}
+
+.text-muted {
+  color: #6c757d !important;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .btn {
+    font-size: 1rem;
+  }
+}

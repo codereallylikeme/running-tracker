@@ -1,18 +1,11 @@
 import React, { useState, useEffect } from "react";
-import Container from 'react-bootstrap/Container';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import Card from 'react-bootstrap/Card';
+import { Container, Form, Button, Card, Image, Row, Col } from 'react-bootstrap';
 import "leaflet/dist/leaflet.css";
 import LeafletMapComponent from "./componets/LeafletMapComponent";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import 'leaflet/dist/leaflet.css';
-import Image from 'react-bootstrap/Image';
 import logo from './logo.svg'
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import './index.css'
+import './App.css'
 
 
 
@@ -70,6 +63,7 @@ function App() {
   const [progress, setProgress] = useState(0); // Track progress
   const [inputError, setInputError] = useState(""); // For input validation messages
   const [endTime, setEndTime] = useState(null); // Track the end time of the session
+  const [watchId, setWatchId] = useState(null); // Store watch ID
 
   // Validate the goal input and set error message if needed
   const validateInput = (value) => {
@@ -110,7 +104,7 @@ function App() {
       setIsSessionEnded(false); // Reset session ended state
       setStartTime(new Date()); // Record the start time when tracking begins
       setEndTime(null); // Reset the end time for the new session
-      navigator.geolocation.watchPosition(
+      const id = navigator.geolocation.watchPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
           const newLocation = { lat: latitude, lng: longitude };
@@ -127,10 +121,11 @@ function App() {
         (error) => console.error(error),
         {
           enableHighAccuracy: true,
-  maximumAge: 30000,
-  timeout: 27000,
+  maximumAge: 0,
+  timeout: 10000,
         }
       );
+      setWatchId(id); // Store watch ID
     } else {
       alert("Geolocation is not supported by your browser.");
     }
@@ -146,8 +141,9 @@ function App() {
   }, [distanceCovered, dailyGoal]);
 
   const stopTracking = () => {
-    setIsTracking(false);
-    setPrevLocation(null); // Reset previous location
+    if (watchId !== null) {
+      navigator.geolocation.clearWatch(watchId);
+    }
   };
 
   const endSession = () => {
@@ -158,6 +154,11 @@ function App() {
 
   // Function to reset the tracking session
   const resetSession = () => {
+    // Stop geolocation watch if it's running
+  if (navigator.geolocation && watchId !== null) {
+    navigator.geolocation.clearWatch(watchId); // Clear any active geolocation watch
+    setWatchId(null); // Reset the watchId state
+  }
     setDistanceCovered(0);
     setRoute([]);
     setProgress(0);
@@ -165,6 +166,7 @@ function App() {
     setIsTracking(false);
     setStartTime(null);
     setEndTime(null);
+    setPrevLocation(null); // Reset previous location to avoid inaccurate calculations
   };
 
    // Calculate the duration of the session
@@ -177,97 +179,130 @@ function App() {
   }
 
   return (
-    <Container className="container-sm text-center p-4 btn btn-light">
-       <Card className="">
-       <Image src={logo} width={171}
-        height={180} rounded alt="logo" className="text-primary mx-auto text-center px-3"/>
-       
-       
-  
-    <div className="App">
-    
-       
-      <h1>Jogging Tracker</h1>
-      <div>
-      
-      
-        <p>Set Your Weekly and Daily Goals</p>
-        {/* Input fields for weekly and daily goals with validation */}
-        <Form className="align-items-center">
-        <Form.Group className="mb-2" as={Row} controlId="formWeeklyGoal">
-        <Form.Label>
-          Weekly Goal (km)
-          </Form.Label>
-          <Col sm="10">
-          <input className="text-dark text-center"
-            type="number"
-            value={weeklyGoal}
-            onChange={handleWeeklyGoalChange}
-            min="1"
+    <Container className="my-4 py-4">
+      {/* Card for Logo and App Title */}
+      <Card className="text-center shadow-sm p-3 mb-4">
+        <Card.Body>
+          <Image src={logo} width={100} height={100} alt="logo" rounded className="mb-3" />
+          <Card.Title as="h1" className="text-primary">Jogging Tracker</Card.Title>
+          <Card.Text className="text-muted">Track your runs and set goals effortlessly</Card.Text>
+        </Card.Body>
+      </Card>
+
+      {/* Card for Goals Inputs */}
+      <Card className="shadow-sm p-3 mb-4">
+        <Card.Body>
+          <h2>Set Your Weekly and Daily Goals</h2>
+          <Form>
+            {/* Weekly Goal Input */}
+            <Form.Group as={Row} className="mb-3" controlId="formWeeklyGoal">
+              <Form.Label column sm="4" className="text-end">
+                Weekly Goal (km):
+              </Form.Label>
+              <Col sm="6">
+                <Form.Control
+                  type="number"
+                  value={weeklyGoal}
+                  onChange={handleWeeklyGoalChange}
+                  min="1"
+                  className="text-center"
+                  isInvalid={inputError !== ""}
+                />
+              </Col>
+            </Form.Group>
+
+            {/* Daily Goal Input */}
+            <Form.Group as={Row} className="mb-3" controlId="formDailyGoal">
+              <Form.Label column sm="4" className="text-end">
+                Daily Goal (km):
+              </Form.Label>
+              <Col sm="6">
+                <Form.Control
+                  type="number"
+                  value={dailyGoal}
+                  onChange={handleDailyGoalChange}
+                  min="1"
+                  className="text-center"
+                  isInvalid={inputError !== ""}
+                />
+                {inputError && <Form.Control.Feedback type="invalid">{inputError}</Form.Control.Feedback>}
+              </Col>
+            </Form.Group>
+          </Form>
+        </Card.Body>
+      </Card>
+
+      {/* Tracking Actions */}
+      <Card className="shadow-sm p-3 mb-4 text-center">
+        <Card.Body>
+          {!isSessionEnded ? (
+            <div className="d-flex justify-content-center">
+              <Button
+                variant="success"
+                size="lg"
+                className="me-3"
+                onClick={startTracking}
+                disabled={isTracking}
+              >
+                <i className="fas fa-play me-2"></i>Start Tracking
+              </Button>
+              <Button
+                variant="danger"
+                size="lg"
+                className="me-3"
+                onClick={stopTracking}
+                disabled={!isTracking}
+              >
+                <i className="fas fa-stop me-2"></i>Stop Tracking
+              </Button>
+              <Button
+                variant="secondary"
+                size="lg"
+                onClick={endSession}
+                disabled={!isTracking}
+              >
+                <i className="fas fa-flag-checkered me-2"></i>End Session
+              </Button>
+            </div>
+          ) : (
+            <Button variant="dark" size="lg" onClick={resetSession}>
+              <i className="fas fa-sync-alt me-2"></i>Start New Session
+            </Button>
+          )}
+        </Card.Body>
+      </Card>
+
+      {/* Progress Circle */}
+      <Card className="shadow-sm p-3 mb-4">
+        <Card.Body className="text-center">
+          <div style={{ width: 150, height: 150, margin: "0 auto" }}>
+            <CircularProgressbar
+              value={progress}
+              text={`${Math.round(progress)}%`}
+              styles={buildStyles({
+                pathColor: progress >= 100 ? "green" : "orange",
+                textColor: "green",
+                trailColor: "#d6d6d6",
+              })}
             />
-          </Col>
-          
-          </Form.Group>
-        <br />
-        <Form.Group className="mb-2" as={Row} controlId="formDailyGoal">
-        <Form.Label >
-          Daily Goal (km)
-          </Form.Label>
-          <Col sm="10">
-          <input className=" text-dark text-center" 
-            type="number"
-            value={dailyGoal}
-            onChange={handleDailyGoalChange}
-            min="1"
-          />
-          </Col>
-        </Form.Group>
-        </Form>
-        <br />
-        {inputError && <p style={{ color: "red" }}>{inputError}</p>}
-        <div>
-        {!isSessionEnded && (
-          <>
-            <Button variant="success" size="lg" className="me-2"  onClick={startTracking} disabled={isTracking}>
-              Start Tracking
-            </Button>
-            
-            <Button variant="danger" size="lg" className="me-2" onClick={stopTracking} disabled={!isTracking}>
-              Stop Tracking
-            </Button>
-            <Button variant="secondary" size="lg" onClick={endSession} disabled={!isTracking}>
-              End Session
-            </Button>
-          </>
-        )}
-        {isSessionEnded && (
-          <Button variant="dark" size="lg" onClick={resetSession}>Start New Session</Button>
-        )}
-      </div>
-      </div>
+          </div>
+          <h3 className="mt-3">Distance Covered: {distanceCovered.toFixed(2)} km</h3>
+          <p className="text-muted">
+            {distanceCovered.toFixed(2)} km out of {dailyGoal} km
+          </p>
+        </Card.Body>
+      </Card>
 
-      <div style={{ width: 200, height: 200, margin: "20px auto" }}>
-        <CircularProgressbar
-          value={progress}
-          text={`${Math.round(progress)}%`}
-          styles={buildStyles({
-            pathColor: "green",
-            textColor: "green",
-          })}
-        />
-      </div>
-
-      <LeafletMapComponent userLocation={userLocation} route={route}/>
-      <div style={{ marginTop: "20px"  }}>
-        <h3>Distance Covered: {distanceCovered.toFixed(2)} km</h3>
-        <p>
-          Progress: {distanceCovered.toFixed(2)} km out of {dailyGoal} km
-        </p>
-        <p>Duration: {getSessionDuration()}</p> {/* Display duration here */}
-            {/* You can display more session stats here */}
-      </div>
-    </div>
-    </Card>
+      {/* Map and Distance Stats */}
+      <Card className="shadow-sm p-3">
+        <Card.Body>
+          <LeafletMapComponent userLocation={userLocation} route={route} />
+          <div className="mt-4 text-center">
+            <h4>Session Duration: {getSessionDuration()}</h4>
+            <p className="text-muted">Track your distance and view your route on the map.</p>
+          </div>
+        </Card.Body>
+      </Card>
     </Container>
   );
   
