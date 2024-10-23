@@ -1,8 +1,9 @@
 {
   "name": "running-tracker",
   "version": "0.1.0",
-  "homepage": "https://codereallylikeme.github.io/running-tracker",
+  "homepage": "./",
   "private": true,
+  "main": "index.js",
   "dependencies": {
     "bootstrap": "^5.3.3",
     "leaflet": "^1.9.4",
