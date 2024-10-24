@@ -3,6 +3,7 @@ import { Container, Form, Button, Card, Image, Row, Col } from 'react-bootstrap'
 import "leaflet/dist/leaflet.css";
 import LeafletMapComponent from "./componets/LeafletMapComponent";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 import "react-circular-progressbar/dist/styles.css";
 import logo from './logo.svg'
 import './App.css'
@@ -33,7 +34,6 @@ const haversineDistance = (coords1, coords2) => {
 
   return distance;
 };
-
 
 // Helper function to format time duration
 const formatDuration = (milliseconds) => {
@@ -121,13 +121,11 @@ function App() {
         (error) => console.error(error),
         {
           enableHighAccuracy: true,
-  maximumAge: 0,
-  timeout: 10000,
+          maximumAge: 0,
+          timeout: 10000,
         }
       );
       setWatchId(id); // Store watch ID
-    } else {
-      alert("Geolocation is not supported by your browser.");
     }
   };
 
@@ -140,9 +138,11 @@ function App() {
     setProgress(progressPercentage);
   }, [distanceCovered, dailyGoal]);
 
+  // Stop GPS tracking
   const stopTracking = () => {
     if (watchId !== null) {
       navigator.geolocation.clearWatch(watchId);
+      setIsTracking(false); // Reset tracking status
     }
   };
 
@@ -155,10 +155,10 @@ function App() {
   // Function to reset the tracking session
   const resetSession = () => {
     // Stop geolocation watch if it's running
-  if (navigator.geolocation && watchId !== null) {
-    navigator.geolocation.clearWatch(watchId); // Clear any active geolocation watch
-    setWatchId(null); // Reset the watchId state
-  }
+    if (navigator.geolocation && watchId !== null) {
+      navigator.geolocation.clearWatch(watchId); // Clear any active geolocation watch
+      setWatchId(null); // Reset the watchId state
+    }
     setDistanceCovered(0);
     setRoute([]);
     setProgress(0);
@@ -169,14 +169,14 @@ function App() {
     setPrevLocation(null); // Reset previous location to avoid inaccurate calculations
   };
 
-   // Calculate the duration of the session
-   const getSessionDuration = () => {
+  // Calculate the duration of the session
+  const getSessionDuration = () => {
     if (startTime && endTime) {
       const duration = endTime - startTime; // In milliseconds
       return formatDuration(duration); // Convert milliseconds to hh:mm:ss
     }
     return "0h 0m 0s";
-  }
+  };
 
   return (
     <Container className="my-4 py-4">
@@ -221,8 +221,8 @@ function App() {
               <Col sm="6">
                 <Form.Control
                   type="number"
-                  step="0.1" // Allow decimal input
-                  inputMode="decimal" // Mobile optimization to bring numeric keyboard
+                  step="0.1"
+                  inputMode="decimal"
                   value={dailyGoal}
                   onChange={handleDailyGoalChange}
                   min="1"
@@ -309,9 +309,6 @@ function App() {
       </Card>
     </Container>
   );
-  
 }
 
-
-
-export default App
+export default App;
