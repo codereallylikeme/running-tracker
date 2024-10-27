@@ -179,16 +179,17 @@ function App() {
   return (
     <Container className="my-4 py-4">
       {/* Card for Logo and App Title */}
-      <Card className="text-center shadow-sm p-3 mb-4 bg-light text-dark">
+      <Card className="text-center shadow-sm p-3 mb-4 bg-light text-body card">
         <Card.Body>
           <Image src={logo} width={100} height={100} alt="logo" rounded className="mb-3" />
           <Card.Title as="h1" className="text-dark">Jogging Tracker</Card.Title>
-          <Card.Text className="text-secondary">Track your runs and set goals effortlessly</Card.Text>
+          <p className="custom-primary card-text">Track your runs and set goals effortlessly</p>
+          
         </Card.Body>
       </Card>
 
       {/* Card for Goals Inputs */}
-      <Card className="shadow-sm p-3 mb-4 bg-white text-dark">
+      <Card className="text-center shadow-sm p-3 mb-4 bg-light text-body card">
         <Card.Body>
           <h2>Set Your Weekly and Daily Goals</h2>
           <Form>
@@ -201,10 +202,9 @@ function App() {
                 <Form.Control
                   type="number"
                   step="0.1" // Allow decimal input
-                  inputMode="decimal" // Mobile optimization to bring numeric keyboard
                   value={weeklyGoal}
                   onChange={handleWeeklyGoalChange}
-                  min="1"
+                  min="1" max="40"
                   className="text-center text-dark"
                   isInvalid={inputError !== ""}
                 />
@@ -220,10 +220,9 @@ function App() {
                 <Form.Control
                   type="number"
                   step="0.1"
-                  inputMode="decimal"
                   value={dailyGoal}
                   onChange={handleDailyGoalChange}
-                  min="1"
+                  min="1" max="40"
                   className="text-dark text-center"
                   isInvalid={inputError !== ""}
                 />
@@ -242,7 +241,7 @@ function App() {
               <Button
                 variant="success"
                 size="lg"
-                className="me-3"
+                className="me-3 btn custom-success btn-lg"
                 onClick={startTracking}
                 disabled={isTracking}
               >
@@ -275,7 +274,7 @@ function App() {
       </Card>
 
       {/* Progress Circle */}
-      <Card className="shadow-sm p-3 mb-4 bg-light text-dark">
+      <Card className="shadow-sm p-3 mb-4 bg-light text-body card">
         <Card.Body className="text-center">
           <div style={{ width: 150, height: 150, margin: "0 auto" }}>
             <CircularProgressbar
@@ -289,19 +288,19 @@ function App() {
             />
           </div>
           <h3 className="mt-3">Distance Covered: {distanceCovered.toFixed(2)} km</h3>
-          <p className="text-muted">
+          <p className="text-dark">
             {distanceCovered.toFixed(2)} km out of {dailyGoal} km
           </p>
         </Card.Body>
       </Card>
 
       {/* Map and Distance Stats */}
-      <Card className="shadow-sm p-3 bg-white text-dark">
+      <Card className="text-center shadow-sm p-3 mb-4 bg-light text-body card">
         <Card.Body>
           <LeafletMapComponent userLocation={userLocation} route={route} />
           <div className="mt-4 text-center">
             <h4>Session Duration: {getSessionDuration()}</h4>
-            <p className="text-muted">Track your distance and view your route on the map.</p>
+            <p className="text-dark">Track your distance and view your route on the map.</p>
           </div>
         </Card.Body>
       </Card>

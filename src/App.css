@@ -142,3 +142,17 @@ input[type="number"]:focus {
     font-size: 1rem;
   }
 }
+
+
+.custom-primary {
+  color: #004085; /* Darker blue with higher contrast */
+}
+
+.custom-success {
+  background-color: #007B3E; /* Dark green with sufficient contrast */
+  color: #FFFFFF;
+}
+
+.custom-muted {
+  color: #6C757D; /* Darker gray for higher contrast */
+}
