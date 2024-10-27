@@ -67,33 +67,31 @@ function App() {
 
   // Validate the goal input and set error message if needed
   const validateInput = (value) => {
-    if (isNaN(value) || value <= 0) {
-      return false;
-    }
-    return true;
+    return !isNaN(value) && value > 0;
   };
 
-  // Update weekly goal with validation
+  // Handle weekly goal input change
   const handleWeeklyGoalChange = (e) => {
     const value = parseFloat(e.target.value);
-    if (!validateInput(value)) {
-      setInputError("Please enter a valid number greater than 0 for weekly goal.");
-    } else {
-      setInputError("");
+    if (validateInput(value)) {
       setWeeklyGoal(value);
+      setInputError("");
       localStorage.setItem("weeklyGoal", value); // Save to localStorage
+    } else {
+      setInputError("Please enter a valid number greater than 0 for weekly goal.");
     }
   };
 
   // Update daily goal with validation
   const handleDailyGoalChange = (e) => {
     const value = parseFloat(e.target.value);
-    if (!validateInput(value)) {
-      setInputError("Please enter a valid number greater than 0 for daily goal.");
-    } else {
-      setInputError("");
-      setDailyGoal(value);
+    if (validateInput(value)) {
+     setDailyGoal(value);
+     setInputError("");
       localStorage.setItem("dailyGoal", value); // Save to localStorage
+      setInputError("");
+    } else {
+      setInputError("Please enter a valid number")
     }
   };
 
