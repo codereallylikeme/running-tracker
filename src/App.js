@@ -179,22 +179,22 @@ function App() {
   return (
     <Container className="my-4 py-4">
       {/* Card for Logo and App Title */}
-      <Card className="text-center shadow-sm p-3 mb-4">
+      <Card className="text-center shadow-sm p-3 mb-4 bg-light text-dark">
         <Card.Body>
           <Image src={logo} width={100} height={100} alt="logo" rounded className="mb-3" />
-          <Card.Title as="h1" className="text-primary">Jogging Tracker</Card.Title>
-          <Card.Text className="text-muted">Track your runs and set goals effortlessly</Card.Text>
+          <Card.Title as="h1" className="text-dark">Jogging Tracker</Card.Title>
+          <Card.Text className="text-secondary">Track your runs and set goals effortlessly</Card.Text>
         </Card.Body>
       </Card>
 
       {/* Card for Goals Inputs */}
-      <Card className="shadow-sm p-3 mb-4">
+      <Card className="shadow-sm p-3 mb-4 bg-white text-dark">
         <Card.Body>
           <h2>Set Your Weekly and Daily Goals</h2>
           <Form>
             {/* Weekly Goal Input */}
             <Form.Group as={Row} className="mb-3" controlId="formWeeklyGoal">
-              <Form.Label column sm="4" className="text-end">
+              <Form.Label column sm="4" className="text-dark text-end">
                 Weekly Goal (km):
               </Form.Label>
               <Col sm="6">
@@ -205,7 +205,7 @@ function App() {
                   value={weeklyGoal}
                   onChange={handleWeeklyGoalChange}
                   min="1"
-                  className="text-center"
+                  className="text-center text-dark"
                   isInvalid={inputError !== ""}
                 />
               </Col>
@@ -213,7 +213,7 @@ function App() {
 
             {/* Daily Goal Input */}
             <Form.Group as={Row} className="mb-3" controlId="formDailyGoal">
-              <Form.Label column sm="4" className="text-end">
+              <Form.Label column sm="4" className="text-dark text-end">
                 Daily Goal (km):
               </Form.Label>
               <Col sm="6">
@@ -224,7 +224,7 @@ function App() {
                   value={dailyGoal}
                   onChange={handleDailyGoalChange}
                   min="1"
-                  className="text-center"
+                  className="text-dark text-center"
                   isInvalid={inputError !== ""}
                 />
                 {inputError && <Form.Control.Feedback type="invalid">{inputError}</Form.Control.Feedback>}
@@ -235,7 +235,7 @@ function App() {
       </Card>
 
       {/* Tracking Actions */}
-      <Card className="shadow-sm p-3 mb-4 text-center">
+      <Card className="shadow-sm p-3 mb-4 text-center bg-dark text-light">
         <Card.Body>
           {!isSessionEnded ? (
             <div className="d-flex justify-content-center">
@@ -267,7 +267,7 @@ function App() {
               </Button>
             </div>
           ) : (
-            <Button variant="dark" size="lg" onClick={resetSession}>
+            <Button variant="dark" size="lg" className="text-dark" onClick={resetSession}>
               <i className="fas fa-sync-alt me-2"></i>Start New Session
             </Button>
           )}
@@ -275,7 +275,7 @@ function App() {
       </Card>
 
       {/* Progress Circle */}
-      <Card className="shadow-sm p-3 mb-4">
+      <Card className="shadow-sm p-3 mb-4 bg-light text-dark">
         <Card.Body className="text-center">
           <div style={{ width: 150, height: 150, margin: "0 auto" }}>
             <CircularProgressbar
@@ -283,7 +283,7 @@ function App() {
               text={`${Math.round(progress)}%`}
               styles={buildStyles({
                 pathColor: progress >= 100 ? "green" : "orange",
-                textColor: "green",
+                textColor: "black",
                 trailColor: "#d6d6d6",
               })}
             />
@@ -296,7 +296,7 @@ function App() {
       </Card>
 
       {/* Map and Distance Stats */}
-      <Card className="shadow-sm p-3">
+      <Card className="shadow-sm p-3 bg-white text-dark">
         <Card.Body>
           <LeafletMapComponent userLocation={userLocation} route={route} />
           <div className="mt-4 text-center">
